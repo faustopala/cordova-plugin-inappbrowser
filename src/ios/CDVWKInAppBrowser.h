@@ -46,7 +46,6 @@
 - (void)show:(CDVInvokedUrlCommand*)command;
 - (void)hide:(CDVInvokedUrlCommand*)command;
 - (void)loadAfterBeforeload:(CDVInvokedUrlCommand*)command;
-- (void)poba:(CDVInvokedUrlCommand*)command;
 
 @end
 
