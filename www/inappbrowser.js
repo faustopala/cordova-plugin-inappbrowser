@@ -66,9 +66,6 @@
         hide: function (eventname) {
             exec(null, null, 'InAppBrowser', 'hide', []);
         },
-        poba: function (eventname) {
-            exec(null, null, 'InAppBrowser', 'poba', []);
-        },
         addEventListener: function (eventname, f) {
             if (eventname in this.channels) {
                 this.channels[eventname].subscribe(f);
