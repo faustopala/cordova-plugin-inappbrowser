@@ -90,6 +90,8 @@ static CDVWKInAppBrowser* instance = nil;
 
 - (void)open:(CDVInvokedUrlCommand*)command
 {
+ 
+  NSLog(@"FAUSTO PALA!!!!");
     CDVPluginResult* pluginResult;
     
     NSString* url = [command argumentAtIndex:0];
