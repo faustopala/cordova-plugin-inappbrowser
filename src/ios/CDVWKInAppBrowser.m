@@ -88,10 +88,14 @@ static CDVWKInAppBrowser* instance = nil;
     return NO;
 }
 
+- (void)poba:(CDVInvokedUrlCommand*)command
+{
+  NSLog(@"FAUSTO PALA!!!!");
+}
+
 - (void)open:(CDVInvokedUrlCommand*)command
 {
  
-  NSLog(@"FAUSTO PALA!!!!");
     CDVPluginResult* pluginResult;
     
     NSString* url = [command argumentAtIndex:0];
