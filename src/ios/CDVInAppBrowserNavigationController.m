@@ -32,19 +32,28 @@
 - (void) viewDidLoad {
 
     CGRect statusBarFrame = [self invertFrameIfNeeded:[UIApplication sharedApplication].statusBarFrame];
-    statusBarFrame.size.height = STATUSBAR_HEIGHT;
- if (@available( iOS 11.0, * )) {
-    if ([[[UIApplication sharedApplication] keyWindow] safeAreaInsets].bottom > 0) {
-        // iPhone with notch
-        statusBarFrame.size.height = 44.0;
+    
+    //simplified from https://github.com/apache/cordova-plugin-inappbrowser/issues/301#issuecomment-452220131
+    //and https://stackoverflow.com/questions/46192280/detect-if-the-device-is-iphone-x
+    bool hasTopNotch = NO;
+    if (@available(iOS 11.0, *)) {
+        hasTopNotch = [[[UIApplication sharedApplication] delegate] window].safeAreaInsets.top > 20.0;
     }
-}
-    // simplified from: http://stackoverflow.com/a/25669695/219684
+    if(hasTopNotch){
+        statusBarFrame.size.height = 0;
+    } else {
+        statusBarFrame.size.height = STATUSBAR_HEIGHT;
+    }
 
     UIToolbar* bgToolbar = [[UIToolbar alloc] initWithFrame:statusBarFrame];
     bgToolbar.barStyle = UIBarStyleDefault;
     [bgToolbar setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+    bgToolbar.hidden = YES;
     [self.view addSubview:bgToolbar];
+    
+    
+
+    
 
     [super viewDidLoad];
 }
