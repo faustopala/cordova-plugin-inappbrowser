@@ -88,11 +88,6 @@ static CDVWKInAppBrowser* instance = nil;
     return NO;
 }
 
-- (void)poba:(CDVInvokedUrlCommand*)command
-{
-  NSLog(@"FAUSTO PALA MOD!!!!");
-}
-
 - (void)open:(CDVInvokedUrlCommand*)command
 {
  
