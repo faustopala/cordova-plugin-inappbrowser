@@ -33,6 +33,12 @@
 
     CGRect statusBarFrame = [self invertFrameIfNeeded:[UIApplication sharedApplication].statusBarFrame];
     statusBarFrame.size.height = STATUSBAR_HEIGHT;
+ if (@available( iOS 11.0, * )) {
+    if ([[[UIApplication sharedApplication] keyWindow] safeAreaInsets].bottom > 0) {
+        // iPhone with notch
+        statusBarFrame.size.height = 44.0
+    }
+}
     // simplified from: http://stackoverflow.com/a/25669695/219684
 
     UIToolbar* bgToolbar = [[UIToolbar alloc] initWithFrame:statusBarFrame];
