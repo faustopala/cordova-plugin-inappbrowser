@@ -1108,7 +1108,8 @@ BOOL isExiting = FALSE;
             hasTopNotch = [[[UIApplication sharedApplication] delegate] window].safeAreaInsets.top > 20.0;
         }
         if(!hasTopNotch){
-            viewBounds.origin.y = STATUSBAR_HEIGHT;
+            //viewBounds.origin.y = STATUSBAR_HEIGHT;
+            viewBounds.origin.y = 0;
             viewBounds.size.height = viewBounds.size.height - STATUSBAR_HEIGHT;
         }
 
