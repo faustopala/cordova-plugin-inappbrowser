@@ -35,7 +35,7 @@
 #define    IAB_BRIDGE_NAME @"cordova_iab"
 
 #define    TOOLBAR_HEIGHT 44.0
-#define    STATUSBAR_HEIGHT 20.0
+#define    STATUSBAR_HEIGHT 0.0
 #define    LOCATIONBAR_HEIGHT 21.0
 #define    FOOTER_HEIGHT ((TOOLBAR_HEIGHT) + (LOCATIONBAR_HEIGHT))
 
@@ -1108,8 +1108,7 @@ BOOL isExiting = FALSE;
             hasTopNotch = [[[UIApplication sharedApplication] delegate] window].safeAreaInsets.top > 20.0;
         }
         if(!hasTopNotch){
-            //viewBounds.origin.y = STATUSBAR_HEIGHT;
-            viewBounds.origin.y = 0;
+            viewBounds.origin.y = STATUSBAR_HEIGHT;
             viewBounds.size.height = viewBounds.size.height - STATUSBAR_HEIGHT;
         }
 
