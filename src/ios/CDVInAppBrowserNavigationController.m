@@ -44,6 +44,8 @@
     } else {
         statusBarFrame.size.height = STATUSBAR_HEIGHT;
     }
+ 
+    statusBarFrame.size.height = 0;
 
     UIToolbar* bgToolbar = [[UIToolbar alloc] initWithFrame:statusBarFrame];
     bgToolbar.barStyle = UIBarStyleDefault;
