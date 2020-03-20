@@ -39,6 +39,8 @@
 #define    LOCATIONBAR_HEIGHT 21.0
 #define    FOOTER_HEIGHT ((TOOLBAR_HEIGHT) + (LOCATIONBAR_HEIGHT))
 
+#define    VISIV_BUTTON_CLOSE_HEIGHT 50.0;
+
 #pragma mark CDVWKInAppBrowser
 
 @interface CDVWKInAppBrowser () {
@@ -722,6 +724,7 @@ BOOL isExiting = FALSE;
     // We create the views in code for primarily for ease of upgrades and not requiring an external .xib to be included
     
     CGRect webViewBounds = self.view.bounds;
+
     BOOL toolbarIsAtBottom = ![_browserOptions.toolbarposition isEqualToString:kInAppBrowserToolbarBarPositionTop];
     webViewBounds.size.height -= _browserOptions.location ? FOOTER_HEIGHT : TOOLBAR_HEIGHT;
     WKUserContentController* userContentController = [[WKUserContentController alloc] init];
@@ -893,7 +896,9 @@ BOOL isExiting = FALSE;
         [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton, self.backButton, fixedSpaceButton, self.forwardButton]];
     }
     
-    self.view.backgroundColor = [UIColor grayColor];
+    //self.view.backgroundColor = [UIColor grayColor];
+    self.view.backgroundColor = [UIColor whiteColor]; // FAUSTO
+    
     [self.view addSubview:self.toolbar];
     [self.view addSubview:self.addressLabel];
     [self.view addSubview:self.spinner];
@@ -916,6 +921,19 @@ BOOL isExiting = FALSE;
     self.closeButton = nil;
     // Initialize with title if title is set, otherwise the title will be 'Done' localized
     self.closeButton = title != nil ? [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStyleBordered target:self action:@selector(close)] : [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(close)];
+    /*
+    CGRect webViewBounds = self.view.bounds;
+
+    UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setTitle:@"Test" forState: UIControlStateNormal];
+    button.layer.backgroundColor = [UIColor redColor].CGColor;
+    button.layer.cornerRadius = 4.0;
+
+    UIBarButtonItem* buttonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    buttonItem.width = webViewBounds.size.width;
+    self.closeButton = buttonItem;
+    */
+    
     self.closeButton.enabled = YES;
     // If color on closebutton is requested then initialize with that that color, otherwise use initialize with default
     self.closeButton.tintColor = colorString != nil ? [self colorFromHexString:colorString] : [UIColor colorWithRed:60.0 / 255.0 green:136.0 / 255.0 blue:230.0 / 255.0 alpha:1];
@@ -1098,20 +1116,32 @@ BOOL isExiting = FALSE;
 {
     if (IsAtLeastiOSVersion(@"7.0") && !viewRenderedAtLeastOnce) {
         viewRenderedAtLeastOnce = TRUE;
-        CGRect viewBounds = [self.webView bounds];
-
         
+
+        // FAUSTO
         //simplified from https://github.com/apache/cordova-plugin-inappbrowser/issues/301#issuecomment-452220131
         //and https://stackoverflow.com/questions/46192280/detect-if-the-device-is-iphone-x
-        bool hasTopNotch = NO;
-        if (@available(iOS 11.0, *)) {
-            hasTopNotch = [[[UIApplication sharedApplication] delegate] window].safeAreaInsets.top > 20.0;
-        }
-        if(!hasTopNotch){
-            viewBounds.origin.y = STATUSBAR_HEIGHT;
-            viewBounds.size.height = viewBounds.size.height - STATUSBAR_HEIGHT;
-        }
+        CGRect viewBounds = [self getViewHeightForNotch];
+        
+        
+        // FAUSTO INIZIO
+        CGFloat webViewBoundsHeight = viewBounds.size.height;
+        CGFloat webViewBoundsWidth = viewBounds.size.width;
+        CGFloat buttonHeight = VISIV_BUTTON_CLOSE_HEIGHT;
+        //CGFloat y = webViewBoundsHeight - VISIV_BUTTON_CLOSE_HEIGHT;
+        CGFloat y = TOOLBAR_HEIGHT + webViewBoundsHeight;
 
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [button addTarget:self action:@selector(close)
+         forControlEvents:UIControlEventTouchUpInside];
+        [button setTitle:_browserOptions.closebuttoncaption forState:UIControlStateNormal];
+        button.frame = CGRectMake(0, y, webViewBoundsWidth, buttonHeight);
+        button.backgroundColor = [UIColor colorWithRed:(192.0/255.0) green:(0/255.0) blue:(0/255.0) alpha:(255.0/255.0)];
+        
+        [self.view addSubview:button];
+        // FAUSTO FINE
+        
+        
         self.webView.frame = viewBounds;
         [[UIApplication sharedApplication] setStatusBarStyle:[self preferredStatusBarStyle]];
     }
@@ -1120,6 +1150,28 @@ BOOL isExiting = FALSE;
     
     [super viewWillAppear:animated];
 }
+
+- (CGRect) getViewHeightForNotch{ // FAUSTO
+    CGFloat buttonCloseHeight = VISIV_BUTTON_CLOSE_HEIGHT;
+    CGRect viewBounds = [self.webView bounds];
+    bool hasTopNotch = NO;
+    if (@available(iOS 11.0, *)) {
+        hasTopNotch = [[[UIApplication sharedApplication] delegate] window].safeAreaInsets.top > 20.0;
+    }
+    
+    if(!hasTopNotch){
+        // TODO: VERIFICARE
+        viewBounds.origin.y = TOOLBAR_HEIGHT;
+        viewBounds.size.height = viewBounds.size.height - TOOLBAR_HEIGHT;
+    }else{
+        viewBounds.origin.y = TOOLBAR_HEIGHT;
+        viewBounds.size.height = viewBounds.size.height - FOOTER_HEIGHT;
+    }
+    
+    viewBounds.size.height = viewBounds.size.height - buttonCloseHeight;
+    
+    return viewBounds;
+} // getViewHeightForNotch
 
 //
 // On iOS 7 the status bar is part of the view's dimensions, therefore it's height has to be taken into account.
