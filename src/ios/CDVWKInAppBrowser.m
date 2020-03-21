@@ -1128,8 +1128,12 @@ BOOL isExiting = FALSE;
         CGFloat webViewBoundsHeight = viewBounds.size.height;
         CGFloat webViewBoundsWidth = viewBounds.size.width;
         CGFloat buttonHeight = VISIV_BUTTON_CLOSE_HEIGHT;
+        Boolean hasTopNotch = [self deviceHasNotch];
         //CGFloat y = webViewBoundsHeight - VISIV_BUTTON_CLOSE_HEIGHT;
-        CGFloat y = TOOLBAR_HEIGHT + webViewBoundsHeight;
+        CGFloat y = LOCATIONBAR_HEIGHT + webViewBoundsHeight;
+        if( hasTopNotch ){
+            y = TOOLBAR_HEIGHT + webViewBoundsHeight;
+        }
 
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         [button addTarget:self action:@selector(close)
@@ -1151,18 +1155,24 @@ BOOL isExiting = FALSE;
     [super viewWillAppear:animated];
 }
 
-- (CGRect) getViewHeightForNotch{ // FAUSTO
-    CGFloat buttonCloseHeight = VISIV_BUTTON_CLOSE_HEIGHT;
-    CGRect viewBounds = [self.webView bounds];
+- (Boolean) deviceHasNotch{ // FAUSTO
     bool hasTopNotch = NO;
     if (@available(iOS 11.0, *)) {
         hasTopNotch = [[[UIApplication sharedApplication] delegate] window].safeAreaInsets.top > 20.0;
     }
+    return hasTopNotch;
+
+} // deviceHasNotch
+
+- (CGRect) getViewHeightForNotch{ // FAUSTO
+    CGFloat buttonCloseHeight = VISIV_BUTTON_CLOSE_HEIGHT;
+    CGRect viewBounds = [self.webView bounds];
+    Boolean hasTopNotch = [self deviceHasNotch];
     
     if(!hasTopNotch){
         // TODO: VERIFICARE
-        viewBounds.origin.y = TOOLBAR_HEIGHT;
-        viewBounds.size.height = viewBounds.size.height - TOOLBAR_HEIGHT;
+        viewBounds.origin.y = LOCATIONBAR_HEIGHT;
+        viewBounds.size.height = viewBounds.size.height - LOCATIONBAR_HEIGHT;
     }else{
         viewBounds.origin.y = TOOLBAR_HEIGHT;
         viewBounds.size.height = viewBounds.size.height - FOOTER_HEIGHT;
