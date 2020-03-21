@@ -64,6 +64,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.zxing.client.android.result.GeoResultHandler;
+import com.levelpharma.checklistapp.R;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.Config;
 import org.apache.cordova.CordovaArgs;
@@ -764,6 +767,7 @@ public class InAppBrowser extends CordovaPlugin {
                 RelativeLayout.LayoutParams closeLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
                 if (leftToRight) closeLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
                 else closeLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                closeLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                 _close.setLayoutParams(closeLayoutParams);
 
                 if (Build.VERSION.SDK_INT >= 16)
@@ -807,6 +811,7 @@ public class InAppBrowser extends CordovaPlugin {
                 //Please, no more black!
                 toolbar.setBackgroundColor(toolbarColor);
                 toolbar.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, this.dpToPixels(44)));
+
                 toolbar.setPadding(this.dpToPixels(2), this.dpToPixels(2), this.dpToPixels(2), this.dpToPixels(2));
                 if (leftToRight) {
                     toolbar.setHorizontalGravity(Gravity.LEFT);
@@ -915,12 +920,14 @@ public class InAppBrowser extends CordovaPlugin {
                 } else {
                     _footerColor = android.graphics.Color.LTGRAY;
                 }
-                footer.setBackgroundColor(_footerColor);
+                //footer.setBackgroundColor(_footerColor);
+                footer.setBackgroundColor(toolbarColor);
+
                 RelativeLayout.LayoutParams footerLayout = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, this.dpToPixels(44));
                 footerLayout.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
                 footer.setLayoutParams(footerLayout);
-                if (closeButtonCaption != "") footer.setPadding(this.dpToPixels(8), this.dpToPixels(8), this.dpToPixels(8), this.dpToPixels(8));
-                footer.setHorizontalGravity(Gravity.LEFT);
+                //if (closeButtonCaption != "") footer.setPadding(this.dpToPixels(8), this.dpToPixels(8), this.dpToPixels(8), this.dpToPixels(8));
+                footer.setHorizontalGravity(Gravity.CENTER_HORIZONTAL);
                 footer.setVerticalGravity(Gravity.BOTTOM);
 
                 View footerClose = createCloseButton(7);
@@ -1048,16 +1055,24 @@ public class InAppBrowser extends CordovaPlugin {
                 if (!hideNavigationButtons) toolbar.addView(actionButtonContainer);
                 if (!hideUrlBar) toolbar.addView(edittext);
 
-                // Don't add the toolbar if its been disabled
-                if (getShowLocationBar()) {
-                    // Add our toolbar to our main view/layout
-                    main.addView(toolbar);
-                }
-
                 // Add our webview to our main view/layout
                 RelativeLayout webViewLayout = new RelativeLayout(cordova.getActivity());
+                webViewLayout.setLayoutParams( new RelativeLayout.LayoutParams( LayoutParams.MATCH_PARENT,  LayoutParams.MATCH_PARENT ) );
                 webViewLayout.addView(inAppWebView);
                 main.addView(webViewLayout);
+
+
+
+                LOG.i(LOG_TAG, "ALTEZZA FAUSTO: " + Integer.toString( close.getLayoutParams().height ) );
+
+                //LOG.d("ALTEZZA FAUSTO: " );
+                //, Integer.toString( toolbar.getHeight()
+                // Don't add the toolbar if its been disabled
+//                if (getShowLocationBar()) {
+//                    // Add our toolbar to our main view/layout
+//                    main.setGravity(Gravity.BOTTOM); // FAUSTO
+//                    main.addView(toolbar);
+//                }
 
                 // Don't add the footer unless it's been enabled
                 if (showFooter) {
