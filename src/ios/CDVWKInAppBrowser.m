@@ -630,7 +630,7 @@ static CDVWKInAppBrowser* instance = nil;
                                                       messageAsDictionary:@{@"type":@"loadstop", @"url":url}];
                                                       
 NSLog(@"POBA %@",url); // FAUSTO
-// EFFETTUARE CHECK SULL'URL PAYPAL E CAMBIARE IL TESTO DEL BOTTONE
+// EFFETTUARE CHECK SULL'URL PAYPAL E CAMBIARE IL TESTO DEL BOTTONE st=Completed&
 [self.inAppBrowserViewController.visivCloseButton setTitle:@"POBA" forState:UIControlStateNormal];
 //[self.inAppBrowserViewController.visivCloseButton set];
 //[self.inAppBrowserViewController setCloseButtonTitle: @"POBA" :@"#FF0000" :0];
