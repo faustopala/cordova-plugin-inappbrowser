@@ -897,7 +897,7 @@ BOOL isExiting = FALSE;
     }
     
     //self.view.backgroundColor = [UIColor grayColor];
-    self.view.backgroundColor = [UIColor whiteColor]; // FAUSTO
+    self.view.backgroundColor = [UIColor whiteColor]; // f
     
     [self.view addSubview:self.toolbar];
     [self.view addSubview:self.addressLabel];
@@ -1139,9 +1139,13 @@ BOOL isExiting = FALSE;
         [button addTarget:self action:@selector(close)
          forControlEvents:UIControlEventTouchUpInside];
         [button setTitle:_browserOptions.closebuttoncaption forState:UIControlStateNormal];
-        button.frame = CGRectMake(0, y, webViewBoundsWidth, buttonHeight);
-        button.backgroundColor = [UIColor colorWithRed:(192.0/255.0) green:(0/255.0) blue:(0/255.0) alpha:(255.0/255.0)];
         
+        //button.tintColor = _browserOptions.closebuttoncaption != nil ? [self colorFromHexString:_browserOptions.closebuttoncaption] : [UIColor colorWithRed:60.0 / 255.0 green:136.0 / 255.0 blue:230.0 / 255.0 alpha:1];
+        [button setTitleColor:[self colorFromHexString:_browserOptions.closebuttoncolor] forState:UIControlStateNormal];
+        //[button setTitleColor: forState:UIControlStateNormal];
+        
+        button.frame = CGRectMake(0, y, webViewBoundsWidth, buttonHeight);
+        button.backgroundColor = [self colorFromHexString:_browserOptions.toolbarcolor];
         [self.view addSubview:button];
         // FAUSTO FINE
         
