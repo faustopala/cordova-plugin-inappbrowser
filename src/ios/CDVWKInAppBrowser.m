@@ -628,6 +628,13 @@ static CDVWKInAppBrowser* instance = nil;
         }
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
                                                       messageAsDictionary:@{@"type":@"loadstop", @"url":url}];
+                                                      
+NSLog(@"POBA %@",url); // FAUSTO
+// EFFETTUARE CHECK SULL'URL PAYPAL E CAMBIARE IL TESTO DEL BOTTONE
+[self.inAppBrowserViewController.visivCloseButton setTitle:@"POBA" forState:UIControlStateNormal];
+//[self.inAppBrowserViewController.visivCloseButton set];
+//[self.inAppBrowserViewController setCloseButtonTitle: @"POBA" :@"#FF0000" :0];
+                                                      
         [pluginResult setKeepCallback:[NSNumber numberWithBool:YES]];
         
         [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
@@ -804,6 +811,36 @@ BOOL isExiting = FALSE;
     self.spinner.opaque = NO;
     self.spinner.userInteractionEnabled = NO;
     [self.spinner stopAnimating];
+    
+    
+    
+    
+    
+    // FAUSTO INIZIO
+    CGRect viewBounds = [self getViewHeightForNotch];
+    CGFloat webViewBoundsHeight = viewBounds.size.height;
+    CGFloat webViewBoundsWidth = viewBounds.size.width;
+    CGFloat buttonHeight = VISIV_BUTTON_CLOSE_HEIGHT;
+    Boolean hasTopNotch = [self deviceHasNotch];
+    //CGFloat y = webViewBoundsHeight - VISIV_BUTTON_CLOSE_HEIGHT;
+    CGFloat y = LOCATIONBAR_HEIGHT + webViewBoundsHeight;
+    if( hasTopNotch ){
+        y = TOOLBAR_HEIGHT + webViewBoundsHeight;
+    }
+
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button addTarget:self action:@selector(close)
+     forControlEvents:UIControlEventTouchUpInside];
+    [button setTitle:_browserOptions.closebuttoncaption forState:UIControlStateNormal];
+    
+    //button.tintColor = _browserOptions.closebuttoncaption != nil ? [self colorFromHexString:_browserOptions.closebuttoncaption] : [UIColor colorWithRed:60.0 / 255.0 green:136.0 / 255.0 blue:230.0 / 255.0 alpha:1];
+    [button setTitleColor:[self colorFromHexString:_browserOptions.closebuttoncolor] forState:UIControlStateNormal];
+    //[button setTitleColor: forState:UIControlStateNormal];
+    
+    button.frame = CGRectMake(0, y, webViewBoundsWidth, buttonHeight);
+    button.backgroundColor = [self colorFromHexString:_browserOptions.toolbarcolor];
+    self.visivCloseButton = button;
+    
     
     self.closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(close)];
     self.closeButton.enabled = YES;
@@ -1121,35 +1158,11 @@ BOOL isExiting = FALSE;
         // FAUSTO
         //simplified from https://github.com/apache/cordova-plugin-inappbrowser/issues/301#issuecomment-452220131
         //and https://stackoverflow.com/questions/46192280/detect-if-the-device-is-iphone-x
-        CGRect viewBounds = [self getViewHeightForNotch];
         
-        
-        // FAUSTO INIZIO
-        CGFloat webViewBoundsHeight = viewBounds.size.height;
-        CGFloat webViewBoundsWidth = viewBounds.size.width;
-        CGFloat buttonHeight = VISIV_BUTTON_CLOSE_HEIGHT;
-        Boolean hasTopNotch = [self deviceHasNotch];
-        //CGFloat y = webViewBoundsHeight - VISIV_BUTTON_CLOSE_HEIGHT;
-        CGFloat y = LOCATIONBAR_HEIGHT + webViewBoundsHeight;
-        if( hasTopNotch ){
-            y = TOOLBAR_HEIGHT + webViewBoundsHeight;
-        }
-
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        [button addTarget:self action:@selector(close)
-         forControlEvents:UIControlEventTouchUpInside];
-        [button setTitle:_browserOptions.closebuttoncaption forState:UIControlStateNormal];
-        
-        //button.tintColor = _browserOptions.closebuttoncaption != nil ? [self colorFromHexString:_browserOptions.closebuttoncaption] : [UIColor colorWithRed:60.0 / 255.0 green:136.0 / 255.0 blue:230.0 / 255.0 alpha:1];
-        [button setTitleColor:[self colorFromHexString:_browserOptions.closebuttoncolor] forState:UIControlStateNormal];
-        //[button setTitleColor: forState:UIControlStateNormal];
-        
-        button.frame = CGRectMake(0, y, webViewBoundsWidth, buttonHeight);
-        button.backgroundColor = [self colorFromHexString:_browserOptions.toolbarcolor];
-        [self.view addSubview:button];
+        [self.view addSubview:self.visivCloseButton];
         // FAUSTO FINE
         
-        
+        CGRect viewBounds = [self getViewHeightForNotch];
         self.webView.frame = viewBounds;
         [[UIApplication sharedApplication] setStatusBarStyle:[self preferredStatusBarStyle]];
     }
