@@ -1452,6 +1452,20 @@ public class InAppBrowser extends CordovaPlugin {
                 obj.put("url", url);
 
                 sendUpdate(obj, true);
+                // FAUSTO
+                if( url.contains("/paypalreturn") ){
+
+                    new java.util.Timer().schedule(
+                        new java.util.TimerTask() {
+                            @Override
+                            public void run() {
+                                closeDialog();
+                            }
+
+                        },
+                        5000
+                    );
+                }
             } catch (JSONException ex) {
                 LOG.d(LOG_TAG, "Should never happen");
             }
