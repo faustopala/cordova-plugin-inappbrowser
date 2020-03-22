@@ -838,7 +838,7 @@ BOOL isExiting = FALSE;
     //CGFloat y = webViewBoundsHeight - VISIV_BUTTON_CLOSE_HEIGHT;
     CGFloat y = LOCATIONBAR_HEIGHT + webViewBoundsHeight;
     if( hasTopNotch ){
-        y = TOOLBAR_HEIGHT + webViewBoundsHeight;
+        y = LOCATIONBAR_HEIGHT + self.webView.frame.size.height - buttonHeight;
     }
 
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -851,6 +851,7 @@ BOOL isExiting = FALSE;
     //[button setTitleColor: forState:UIControlStateNormal];
     
     button.frame = CGRectMake(0, y, webViewBoundsWidth, buttonHeight);
+    //button.frame = CGRectMake(0, 0, webViewBoundsWidth, buttonHeight);
     button.backgroundColor = [self colorFromHexString:_browserOptions.toolbarcolor];
     self.visivCloseButton = button;
     
