@@ -630,8 +630,21 @@ static CDVWKInAppBrowser* instance = nil;
                                                       messageAsDictionary:@{@"type":@"loadstop", @"url":url}];
                                                       
 NSLog(@"POBA %@",url); // FAUSTO
-// EFFETTUARE CHECK SULL'URL PAYPAL E CAMBIARE IL TESTO DEL BOTTONE st=Completed&
-[self.inAppBrowserViewController.visivCloseButton setTitle:@"POBA" forState:UIControlStateNormal];
+NSString *partialReturnUrl = @"\/paypalreturn"; // PORZIONE DI URL RESTITUITA DA PAYPAL
+if ([url rangeOfString:partialReturnUrl].location != NSNotFound) {
+    [self.inAppBrowserViewController.visivCloseButton setTitle:@"CHIUDI" forState:UIControlStateNormal];
+    double delayInSeconds = 6.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+      [self.inAppBrowserViewController close];
+    });
+
+    
+}
+
+// EFFETTUARE CHECK SULL'URL PAYPAL E CAMBIARE IL TESTO DEL BOTTONE
+//
+
 //[self.inAppBrowserViewController.visivCloseButton set];
 //[self.inAppBrowserViewController setCloseButtonTitle: @"POBA" :@"#FF0000" :0];
                                                       
