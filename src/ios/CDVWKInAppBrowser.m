@@ -629,18 +629,19 @@ static CDVWKInAppBrowser* instance = nil;
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
                                                       messageAsDictionary:@{@"type":@"loadstop", @"url":url}];
                                                       
-NSLog(@"POBA %@",url); // FAUSTO
-NSString *partialReturnUrl = @"\/paypalreturn"; // PORZIONE DI URL RESTITUITA DA PAYPAL
-if ([url rangeOfString:partialReturnUrl].location != NSNotFound) {
-    [self.inAppBrowserViewController.visivCloseButton setTitle:@"CHIUDI" forState:UIControlStateNormal];
-    double delayInSeconds = 6.0;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-      [self.inAppBrowserViewController close];
-    });
+        // SE L'URL CONTIENE LA STRINGA LA STRINGA CONTENUTA NELLA VARIABILE partialReturnUrl
+        //  (HARDCODED) LA WEBVIEW VIENE CHIUSA AUTOMATICAMENTE DOPO 5 SECONDI
+        NSString *partialReturnUrl = @"\/paypalreturn"; // PORZIONE DI URL RESTITUITA DA PAYPAL
+        if ([url rangeOfString:partialReturnUrl].location != NSNotFound) {
+            [self.inAppBrowserViewController.visivCloseButton setTitle:@"CHIUDI" forState:UIControlStateNormal];
+            double delayInSeconds = 5.0;
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+              [self.inAppBrowserViewController close];
+            });
 
-    
-}
+            
+        }
 
 // EFFETTUARE CHECK SULL'URL PAYPAL E CAMBIARE IL TESTO DEL BOTTONE
 //
