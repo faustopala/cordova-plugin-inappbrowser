@@ -628,7 +628,8 @@ static CDVWKInAppBrowser* instance = nil;
         }
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
                                                       messageAsDictionary:@{@"type":@"loadstop", @"url":url}];
-                                                      
+            
+        /*
         // SE L'URL CONTIENE LA STRINGA LA STRINGA CONTENUTA NELLA VARIABILE partialReturnUrl
         //  (HARDCODED) LA WEBVIEW VIENE CHIUSA AUTOMATICAMENTE DOPO 5 SECONDI
         NSString *partialReturnUrl = @"\/paypalreturn"; // PORZIONE DI URL RESTITUITA DA PAYPAL
@@ -639,9 +640,8 @@ static CDVWKInAppBrowser* instance = nil;
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
               [self.inAppBrowserViewController close];
             });
-
-            
         }
+        */
 
 // EFFETTUARE CHECK SULL'URL PAYPAL E CAMBIARE IL TESTO DEL BOTTONE
 //
