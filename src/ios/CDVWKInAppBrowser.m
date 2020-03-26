@@ -849,7 +849,8 @@ BOOL isExiting = FALSE;
     
     //button.tintColor = _browserOptions.closebuttoncaption != nil ? [self colorFromHexString:_browserOptions.closebuttoncaption] : [UIColor colorWithRed:60.0 / 255.0 green:136.0 / 255.0 blue:230.0 / 255.0 alpha:1];
     [button setTitleColor:[self colorFromHexString:_browserOptions.closebuttoncolor] forState:UIControlStateNormal];
-    //[button setTitleColor: forState:UIControlStateNormal];
+    [button.titleLabel setFont:[UIFont fontWithName:@"Arial" size:18.f]];
+    [button.titleLabel setFont:[UIFont boldSystemFontOfSize:18.f]];
     
     button.frame = CGRectMake(0, y, webViewBoundsWidth, buttonHeight);
     //button.frame = CGRectMake(0, 0, webViewBoundsWidth, buttonHeight);
