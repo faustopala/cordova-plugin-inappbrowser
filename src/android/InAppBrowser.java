@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Typeface;
 import android.os.Parcelable;
 import android.provider.Browser;
 import android.content.res.Resources;
@@ -744,6 +745,7 @@ public class InAppBrowser extends CordovaPlugin {
                 if (closeButtonCaption != "") {
                     // Use TextView for text
                     TextView close = new TextView(cordova.getActivity());
+                    close.setTypeface(null, Typeface.BOLD);
                     close.setText(closeButtonCaption);
                     close.setTextSize(20);
                     if (closeButtonColor != "") close.setTextColor(android.graphics.Color.parseColor(closeButtonColor));
